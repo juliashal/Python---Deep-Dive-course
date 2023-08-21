@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "Part 4 - OOP"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
