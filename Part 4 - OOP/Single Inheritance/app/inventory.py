@@ -2,7 +2,7 @@ from utils.validators import integer_check
 
 class Resource:
         
-    def __init__(self, name: str, manufacturer: str, total: int, allocated=0):
+    def __init__(self, name: str, manufacturer: str, total: int, allocated: int):
         self._name = name
         self._manufacturer = manufacturer
         self._total = integer_check("Total",total, min_value=0)
@@ -82,3 +82,26 @@ class Resource:
             self._total+=n
         else:
             raise ValueError("You can't purchase a negative amount")
+        
+class CPU(Resource):
+    def __init__(self, name, manufacturer, total: int, allocated: int, cores: int, socket: str, power_watts:int):
+        super().__init__(name, manufacturer, total, allocated)
+        self.cores = integer_check("Num of cores",cores, min_value=1)
+        self.socket = socket
+        self.power_watts = integer_check("Power Watts",power_watts, min_value=1)
+
+class Storage(Resource):
+    def __init__(self, name, manufacturer, total: int, allocated: int, capacity_GB: int):
+        super().__init__(name, manufacturer, total, allocated)
+        self.capacity_GB = integer_check("Capacity",capacity_GB, min_value=1)
+
+class HDD(Storage):
+    def __init__(self, name, manufacturer, total: int, allocated: int, capacity_GB: int, size: str, rpm: int):
+        super().__init__(name, manufacturer, total, allocated, capacity_GB)
+        self.size = size
+        self.rpm = integer_check("RPM",rpm, 5000, 10000)
+
+class SSD(Storage):
+    def __init__(self, name, manufacturer, total: int, allocated: int, capacity_GB: int, interface: str):
+        super().__init__(name, manufacturer, total, allocated, capacity_GB)
+        self.interface = interface
