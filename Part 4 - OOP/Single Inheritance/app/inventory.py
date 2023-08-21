@@ -44,12 +44,12 @@ class Resource:
         '''
         method to take n resources from the pool (as long as inventory is available)
         '''
-        _n = integer_check("Num of resources",n)
+        _n = integer_check("Num of resources", n, min_value=1)
         if self.allocated+_n < self.total:
             self._allocated += _n
             return f"{_n} units of {self.name} has been successfully claimed"
         else:
-            return f"Not enough inventory"
+            raise ValueError("Not enough inventory")
 
     def freeup(self, n):
         '''
@@ -60,19 +60,19 @@ class Resource:
             self._allocated -= _n
             return f"{_n} units of {self.name} has been successfully returned"
         else:
-            return ValueError("Can't return more than allocated")
+            raise ValueError("Can't return more than allocated")
 
     def died(self, n):
         '''
         method to return and permanently remove inventory from the pool
         '''
-        _n = integer_check("Num of resources",n)
+        _n = integer_check("Num of resources",n, min_value=1)
         if self.allocated-_n >= 0 and self.total-_n > 0:
             self._allocated -= _n
             self._total -= _n
             return f"{_n} units of {self.name} has been successfully removed from the db"
         else:
-            return ValueError("Can't remove  more than allocated or in total inventory")
+            raise ValueError("Can't remove  more than allocated or in total inventory")
         
     def purchased(self, n):
         '''
