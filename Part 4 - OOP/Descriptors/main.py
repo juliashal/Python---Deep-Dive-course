@@ -64,8 +64,3 @@ class CharField(BaseValidator):
 class Person:
     name = CharField(1, 50)
     age = IntegerField(0, 200)
-
-
-p = Person()
-p.name = 'Alex'
-p.age = 32
