@@ -21,4 +21,3 @@ class AppException(enum.Enum):
 print(AppException['NotChar'])
 print(AppException(101))
 print(AppException.NotInteger.message)
-print(AppException.NotInteger.throw())
