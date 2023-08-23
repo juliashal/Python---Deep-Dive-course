@@ -25,7 +25,7 @@ class BaseValidator:
         
     def __set__(self, instance, value):
         if not isinstance(value, self._type):
-            raise ValueError(f'{self.property_name} must be a type of {self._type.__name__}.')
+            raise TypeError(f'{self.property_name} must be a type of {self._type.__name__}.')
         
         if value is not None:
             if isinstance(value, collections.abc.Sequence):
