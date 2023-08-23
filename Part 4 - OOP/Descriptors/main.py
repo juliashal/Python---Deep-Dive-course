@@ -29,15 +29,15 @@ class BaseValidator:
         
         if value is not None:
             if isinstance(value, collections.abc.Sequence):
-                if len(value) < self.min:
+                if self.min is not None and len(value) < self.min:
                     raise ValueError(f'{self.property_name} length must be greater than {self.min}.')
-                if len(value) > self.max:
-                    raise ValueError(f'{self.property_name} length must be less than {self.min}.')
+                if self.max is not None and len(value) > self.max:
+                    raise ValueError(f'{self.property_name} length must be less than {self.max}.')
             
             else:
-                if value < self.min:
+                if self.min is not None and value < self.min:
                     raise ValueError(f'{self.property_name} must be greater than {self.min}.')
-                if value > self.max:
+                if self.max is not None and value > self.max:
                     raise ValueError(f'{self.property_name} must be less than {self.max}.')
             
         instance.__dict__[self.property_name] = value
