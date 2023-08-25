@@ -20,6 +20,10 @@ class WidgetException(Exception, TracebackException):
         if user_error_message is not None:
             self.user_error_message = user_error_message
     
+    @property
+    def traceback(self):
+        return TracebackException.from_exception(self).format()
+    
     def log_exc(self):
         exception = {
             "time": datetime.utcnow().isoformat(),
@@ -27,49 +31,42 @@ class WidgetException(Exception, TracebackException):
             "status": self.error_status,
             "internal message": self.internal_error_message,
             "args": self.args[1:],
-            "traceback": format(self.from_exception)
+            "traceback": list(self.traceback)
         }
         return exception
     
     def to_json(self):
         to_user = {
             "time": datetime.utcnow().isoformat(),
-            "message": self.user_error_message
+            "message": self.user_error_message,
+            "category": type(self).__name__
         }
         json_obj = json.dumps(to_user)
         return json_obj
 
 class SupplierException(WidgetException):
     internal_error_message = 'Supplier Exception'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class NotManufactured(SupplierException):
     internal_error_message = 'Widget is no longer manufactured by supplier'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class ProductionDelayed(SupplierException):
     internal_error_message = 'Widget production has been delayed by manufacturer'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class ShippingDelayed(SupplierException):
     internal_error_message = 'Widget shipping has been delayed by supplier'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class CheckoutException(WidgetException):
     internal_error_message = 'Checkout Exception'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class InventoryTypeException(CheckoutException):
     internal_error_message = 'Something just crashed'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class OutOfStock(InventoryTypeException):
     internal_error_message = 'Inventory is out of stock'
-    user_error_message = 'Sorry, there is no stock of this product.'
 
 class PricingException(CheckoutException):
     internal_error_message = 'Pricing Exception'
-    user_error_message = 'Sorry, there is an error on our end. Please bare with us.'
 
 class InvalidCoupon(PricingException):
     internal_error_message = 'Invalid Coupon code'
@@ -86,7 +83,8 @@ try:
     raise CannotStackCoupons()
 except CannotStackCoupons as ex:
     print(ex.log_exc())
-    raise
+
+
 
 
 
